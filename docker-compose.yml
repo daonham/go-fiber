@@ -1,0 +1,56 @@
+version: "3"
+services:
+  app:
+    container_name: go-fiber-app
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - .:/opt/go-fiber
+    depends_on:
+      - go-fiber-mysql
+    networks:
+      - go_fiber_network
+
+  go-fiber-mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: go_fiber_sql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - database_mysql:/var/lib/mysql
+    networks:
+      - go_fiber_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - go-fiber-mysql
+    environment:
+      - PMA_HOST=go-fiber-mysql # Note the "go-fiber-mysql". Must be the name of the what you used as the mysql service.
+      - PMA_USER=${DB_USER}
+      - PMA_PORT=${DB_PORT}
+      - PMA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 9091:80
+    restart: always
+    networks:
+      - go_fiber_network
+
+volumes:
+  api:
+  database_mysql:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  go_fiber_network:
+    driver: bridge
