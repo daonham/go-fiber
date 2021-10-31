@@ -12,7 +12,7 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "http://localhost",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, Accept-Encoding, X-Requested-With",
-		AllowMethods:     "GET,POST,PUT,DELETE,PATCH",
+		AllowMethods:     "GET, POST, PUT, DELETE, PATCH",
 		AllowCredentials: true,
 		ExposeHeaders:    "Content-Length",
 		MaxAge:           86400,
