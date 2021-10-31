@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/daonham/go-fiber/controllers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -25,6 +26,8 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
 	})
+
+	app.Post("/post", controllers.CreatePost)
 
 	app.Listen(":8080")
 }
